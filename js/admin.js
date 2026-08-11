@@ -2,14 +2,14 @@
    RockTech — Hidden Admin Panel (route: #/admin)
    NOT linked anywhere in the customer UI — access by typing
    #/admin in the address bar. Requires admin login.
-   Demo login: admin@rocktech.store / admin123
+   Demo login: apurbarocky / admin123
    ============================================================ */
 'use strict';
 
 (() => {
   const { $, money, toast, esc } = UI;
   const SESSION_KEY = 'novahub_admin';
-  const ADMIN_EMAIL = 'admin@rocktech.store';
+  const ADMIN_EMAIL = 'apurbarocky';
   const ADMIN_PASSWORD = 'admin123';
 
   const Admin = { tab: 'overview', productBeingEdited: null, viewingOrder: null, pendingImage: null };
@@ -55,6 +55,7 @@
       ['products', '🛍️', 'Products'],
       ['customers', '👥', 'Customers'],
       ['coupons', '🏷️', 'Coupons'],
+      ['security', '🔐', 'Security'],
     ];
 
     const body = {
@@ -63,6 +64,7 @@
       products: () => adminProducts(),
       customers: () => adminCustomers(users, orders, spend),
       coupons: () => adminCoupons(),
+      security: () => adminSecurity(),
     }[Admin.tab]();
 
     return '<section class="admin">' +
@@ -200,6 +202,27 @@
       '</div>';
   }
 
+  function adminSecurity() {
+    const adminUser = Store.state.users.find(u => u.email === 'admin@rocktech.store');
+    const lastLogin = sessionStorage.getItem('novahub_admin_login');
+    return '<div class="a-card"><div class="a-card-head"><h3>🔐 Admin Security</h3></div>' +
+      '<div class="panel-form">' +
+        '<h4>Admin Credentials</h4>' +
+        '<div class="co-grid2">' +
+          '<label>Current admin email<input type="email" id="secAdminEmail" value="' + esc(adminUser?.email || 'apurbarocky') + '" readonly></label>' +
+          '<label>Last login<input type="text" id="secLastLogin" value="' + esc(lastLogin || 'Current session') + '" readonly></label>' +
+        '</div>' +
+        '<hr style="margin:16px 0; border-color:var(--border)">' +
+        '<h4>Change Admin Password</h4>' +
+        '<label>Current password<input id="secOldPw" type="password" placeholder="Enter current password" required></label>' +
+        '<label>New password<input id="secNewPw" type="password" placeholder="Min 6 characters" minlength="6" required></label>' +
+        '<label>Confirm new password<input id="secNewPw2" type="password" placeholder="Repeat new password" required></label>' +
+        '<button class="btn btn-primary" data-action="admin-change-pw">Update password</button>' +
+        '<p class="muted small">Demo credentials: <code>apurbarocky</code> / <code>admin123</code></p>' +
+      '</div>' +
+    '</div>';
+  }
+
   /* ---------------- Product form modal ---------------- */
   function productFormModal(id) {
     const p = id ? DB.byId(id) : null;
@@ -303,6 +326,7 @@
       const pw = $('#adPw').value;
       if (email === ADMIN_EMAIL && pw === ADMIN_PASSWORD) {
         sessionStorage.setItem(SESSION_KEY, '1');
+        sessionStorage.setItem('novahub_admin_login', new Date().toLocaleString());
         toast('🔐 Admin access granted', 'success');
         location.hash = '#/admin';
         navigate();
@@ -438,6 +462,30 @@
       p.stock = Math.max(0, p.stock + (+el.dataset.delta));
       navigate();
     },
+    'admin-change-pw'(e) {
+      e.preventDefault();
+      const oldPw = $('#secOldPw').value;
+      const newPw = $('#secNewPw').value;
+      const confirmPw = $('#secNewPw2').value;
+      if (!oldPw || !newPw || !confirmPw) return toast('Fill all fields', 'error');
+      if (newPw !== confirmPw) return toast('New passwords do not match', 'error');
+      if (newPw.length < 6) return toast('Password must be at least 6 characters', 'error');
+      const adminUser = Store.state.users.find(u => u.email === 'admin@rocktech.store');
+      if (!adminUser) return toast('Admin user not found', 'error');
+      const hash = (pw) => {
+        let h = 5381;
+        const salted = 'novahub::' + pw;
+        for (let i = 0; i < salted.length; i++) h = ((h << 5) + h + salted.charCodeAt(i)) | 0;
+        return 'h' + (h >>> 0).toString(36);
+      };
+      if (adminUser.password !== hash(oldPw)) return toast('Current password is incorrect', 'error');
+      adminUser.password = hash(newPw);
+      Store.save('novahub_users', Store.state.users);
+      sessionStorage.setItem('novahub_admin_login', new Date().toLocaleString());
+      toast('✓ Admin password updated', 'success');
+      $('#secOldPw').value = ''; $('#secNewPw').value = ''; $('#secNewPw2').value = '';
+      renderAdminPanel();
+    },
   };
 
   /* re-render the current admin panel body */
@@ -450,6 +498,7 @@
       products: () => adminProducts(),
       customers: () => adminCustomers(Store.state.users, Store.state.orders, id => Store.state.orders.filter(o => o.user === id).reduce((s, o) => s + o.totals.total, 0)),
       coupons: () => adminCoupons(),
+      security: () => adminSecurity(),
     }[Admin.tab]();
     panel.innerHTML = body;
   }

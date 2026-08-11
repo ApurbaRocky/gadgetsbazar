@@ -190,6 +190,12 @@ const App = (() => {
       '<section class="hero">' +
         '<div class="hero-glow g1"></div><div class="hero-glow g2"></div>' +
         '<div class="hero-content">' +
+          '<div class="hero-flash">' +
+            '<span class="flash-label">FLASH SALE</span>' +
+            '<strong>Up to 35% off select gadgets</strong>' +
+            '<p>Limited time deals on chargers, earbuds and routers — only while stock lasts.</p>' +
+            '<div class="flash-meta"><span>Ends today</span><a class="link-more" data-action="go" data-href="#/shop?filter=deal">Shop deals →</a></div>' +
+          '</div>' +
           '<span class="hero-tag">⚡ New season · Up to 30% off top tech</span>' +
           '<h1>Smart gadgets for a<br><span class="grad-text">connected</span> life.</h1>' +
           '<p>Chargers, audio, peripherals &amp; networking gear — curated, tested and shipped fast with free returns.</p>' +
@@ -217,6 +223,15 @@ const App = (() => {
         '<div class="perk"><span>↩️</span><div><strong>30-day returns</strong><small>No questions asked</small></div></div>' +
         '<div class="perk"><span>🛡️</span><div><strong>2-year warranty</strong><small>On all electronics</small></div></div>' +
         '<div class="perk"><span>💬</span><div><strong>24/7 support</strong><small>Real humans, fast replies</small></div></div>' +
+      '</section>';
+
+    const marquee =
+      '<section class="marquee-section" aria-label="Product showcase">' +
+        '<div class="marquee" id="productMarquee">' +
+          '<div class="marquee-track">' +
+            DB.PRODUCTS.map(p => '<span class="marquee-item" data-action="go" data-href="#/product/' + p.id + '">' + esc(p.name) + ' — ' + money(p.price) + '</span>').join('') +
+          '</div>' +
+        '</div>' +
       '</section>';
 
     const cats =
@@ -258,7 +273,7 @@ const App = (() => {
         '</form>' +
       '</section>';
 
-    return hero + perks + cats + rows(featured, 'featured') + banners + rows(deals, 'deals') + rows(fresh, 'new') + newsletter;
+    return hero + perks + marquee + cats + rows(featured, 'featured') + banners + rows(deals, 'deals') + rows(fresh, 'new') + newsletter;
   }
 
   function imgTag(p, w, h) {
