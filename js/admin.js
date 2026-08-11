@@ -12,7 +12,7 @@
   const ADMIN_EMAIL = 'admin@rocktech.store';
   const ADMIN_PASSWORD = 'admin123';
 
-  const Admin = { tab: 'overview', productBeingEdited: null, viewingOrder: null };
+  const Admin = { tab: 'overview', productBeingEdited: null, viewingOrder: null, pendingImage: null };
 
   const isAdminLoggedIn = () => sessionStorage.getItem(SESSION_KEY) === '1';
 
@@ -32,11 +32,10 @@
         '<h1>RockTech Admin</h1>' +
         '<p class="muted">Restricted area — staff only.</p>' +
         '<form data-action="admin-login" novalidate>' +
-          '<label>Admin email<input id="adEmail" type="email" value="" placeholder="admin@rocktech.store" required></label>' +
+          '<label>Admin email<input id="adEmail" type="email" value="" placeholder="" required></label>' +
           '<label>Password<input id="adPw" type="password" placeholder="••••••••" required></label>' +
           '<button class="btn btn-primary btn-block" type="submit">Sign in to admin</button>' +
         '</form>' +
-        '<p class="muted small">Demo credentials:<br><code>admin@rocktech.store</code> · <code>admin123</code></p>' +
         '<a class="link-btn" data-action="go" data-href="#/">← Back to storefront</a>' +
       '</div>' +
     '</section>';
@@ -205,6 +204,7 @@
   function productFormModal(id) {
     const p = id ? DB.byId(id) : null;
     Admin.productBeingEdited = id || null;
+    Admin.pendingImage = null;
     const cats = DB.CATEGORIES.map(c =>
       '<option value="' + c.key + '" ' + (p && p.category === c.key ? 'selected' : '') + '>' + esc(c.name) + '</option>').join('');
     const subs = p ? DB.CATEGORIES.find(c => c.key === p.category).subs : DB.CATEGORIES[0].subs;
@@ -237,6 +237,16 @@
             '<label>Gradient color 1<input id="apGrad1" type="color" value="' + (p ? p.grad[0] : '#0ea5e9') + '"></label>' +
           '</div>' +
           '<label>Gradient color 2<input id="apGrad2" type="color" value="' + (p ? p.grad[1] : '#2563eb') + '"></label>' +
+          '<div class="a-img-pick">' +
+            '<img id="apImgPrev" class="a-img-prev" alt="Product image" ' + (p && p.img ? 'src="' + p.img + '"' : 'hidden') + '>' +
+            '<div class="a-img-controls">' +
+              '<label class="btn btn-ghost btn-sm" for="apImg">📷 Upload real image</label>' +
+              '<input type="file" id="apImg" accept="image/*" data-action="admin-img-pick" hidden>' +
+              '<button type="button" class="btn btn-ghost btn-sm" id="apImgRemove" data-action="admin-img-remove" ' + (p && p.img ? '' : 'hidden') + '>Remove image</button>' +
+              '<span class="muted small" id="apImgName"></span>' +
+              '<p class="muted small">Optional — leave empty to use the generated gradient art instead.</p>' +
+            '</div>' +
+          '</div>' +
           '<label class="f-check"><input type="checkbox" id="apFeatured" ' + (p && p.featured ? 'checked' : '') + '><span class="f-box"></span>Show in featured picks</label>' +
           '<label class="f-check"><input type="checkbox" id="apNew" ' + (p && p.isNew ? 'checked' : '') + '><span class="f-box"></span>Mark as New Arrival</label>' +
           '<div class="a-specs-head"><h4>Specifications</h4><button type="button" class="btn btn-ghost btn-sm" data-action="admin-spec-add">+ Add spec</button></div>' +
@@ -342,6 +352,44 @@
         wrap.insertAdjacentHTML('beforeend', '<div class="a-spec-row"><input class="a-spec-k" placeholder="Key (e.g. Power)"><input class="a-spec-v" placeholder="Value"></div>');
       }
     },
+    'admin-img-pick'(el) {
+      const file = el.files && el.files[0];
+      if (!file) return;
+      if (!/^image\//.test(file.type)) return toast('Please choose an image file (JPG, PNG, WebP)', 'error');
+      if (file.size > 5 * 1024 * 1024) return toast('Image is too large — max 5MB', 'error');
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX = 800;
+          const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.round(img.width * scale));
+          canvas.height = Math.max(1, Math.round(img.height * scale));
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return toast('Could not process this image', 'error');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          Admin.pendingImage = canvas.toDataURL(mime, 0.82);
+          $('#apImgPrev').src = Admin.pendingImage;
+          $('#apImgPrev').hidden = false;
+          $('#apImgRemove').hidden = false;
+          $('#apImgName').textContent = file.name + ' — will be used as the product photo';
+          toast('✓ Image ready — saved when you submit the product');
+        };
+        img.onerror = () => toast('Could not read that image file', 'error');
+        img.src = ev.target.result;
+      };
+      reader.onerror = () => toast('Could not read that file', 'error');
+      reader.readAsDataURL(file);
+    },
+    'admin-img-remove'() {
+      Admin.pendingImage = 'REMOVE';
+      $('#apImgPrev').hidden = true;
+      $('#apImgRemove').hidden = true;
+      $('#apImgName').textContent = 'Will use the generated gradient art';
+    },
+
     'admin-product-save'(e) {
       e.preventDefault();
       const name = $('#apName').value.trim();
@@ -360,6 +408,7 @@
         badge: $('#apBadge').value || null, glyph: $('#apGlyph').value || '📦',
         grad: [$('#apGrad1').value, $('#apGrad2').value],
         featured: $('#apFeatured').checked, isNew: $('#apNew').checked,
+        img: Admin.pendingImage === 'REMOVE' ? null : (Admin.pendingImage || (Admin.productBeingEdited ? DB.byId(Admin.productBeingEdited).img : null)),
         specs, reviews: 0, reviewList: [],
       };
       if (Admin.productBeingEdited) {
@@ -371,6 +420,7 @@
         DB.PRODUCTS.push({ id: nextId, ...data });
         toast('✓ Product ' + nextId.toUpperCase() + ' created');
       }
+      Admin.pendingImage = null;
       DB._imgCache && DB._imgCache.clear();
       UI.closeModal();
       navigate();

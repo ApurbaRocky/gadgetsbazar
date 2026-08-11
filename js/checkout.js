@@ -25,7 +25,9 @@
     const user = Store.currentUser();
 
     if (!CO.shipping) CO.shipping = { ...(user && user.addresses.length ? user.addresses[0] : {}) };
-    if (!CO.payment) CO.payment = user && user.wallets && user.wallets.length ? { ...user.wallets[0], method: user.wallets[0].method } : null;
+    if (!CO.payment) CO.payment = user && user.wallets && user.wallets.length
+      ? { ...user.wallets[0], method: user.wallets[0].method, number: user.wallets[0].number, trx: '' }
+      : { method: 'bkash', number: '', trx: '' };
     CO.step = 1;
 
     return '<nav class="crumbs">' + crumb('Home', '#/') + crumb('Checkout', '#') + '</nav>' +
@@ -130,11 +132,11 @@
       '<div class="wallet-fields" id="walletFields"' + (isWallet ? '' : ' hidden') + '>' +
         '<div class="wallet-note">' +
           '<span class="wn-ico">' + (p.method === 'nagad' ? '🟠' : '🔴') + '</span>' +
-          '<div><strong>Send money to (Personal)</strong><p class="wn-num">' + DB.MERCHANT_NUMBER + '</p>' +
-          '<p class="muted small">After sending ' + money(Store.totals().total) + ', enter your number and TrxID below.</p></div>' +
+          '<div><strong>Send money to (Personal):</strong><p class="wn-num">' + DB.MERCHANT_NUMBER + '</p>' +
+          '<p class="muted small">After sending ' + money(Store.totals().total) + ', enter your sender number and TrxID below.</p></div>' +
         '</div>' +
         '<div class="co-grid2">' +
-          '<label>Your ' + (p.method === 'nagad' ? 'Nagad' : 'bKash') + ' number<input id="pwNumber" placeholder="01XXXXXXXXX" value="' + esc(p.number || '') + '" required></label>' +
+          '<label>Your ' + (p.method === 'nagad' ? 'Nagad' : 'bKash') + ' sender number<input id="pwNumber" placeholder="01XXXXXXXXX" value="' + esc(p.number || '') + '" required></label>' +
           '<label>Transaction ID (TrxID)<input id="pwTrx" placeholder="e.g. 9HM7K2LQ5R" value="' + esc(p.trx || '') + '" required></label>' +
         '</div>' +
       '</div>' +
@@ -218,14 +220,15 @@
     'pick-wallet'(el) {
       const user = Store.currentUser();
       CO.useSaved = +el.dataset.index;
-      CO.payment = { ...user.wallets[CO.useSaved] };
+      const wallet = user.wallets[CO.useSaved];
+      CO.payment = { ...wallet, method: wallet.method, number: wallet.number, trx: '' };
       document.querySelectorAll('.card-pick').forEach((b, i) => b.classList.toggle('on', i === CO.useSaved));
       syncWalletUI();
     },
 
     pmethod(el) {
       const method = el.value;
-      CO.payment = { ...(CO.payment || {}), method };
+      CO.payment = { ...(CO.payment || {}), method, number: '', trx: '' };
       document.querySelectorAll('.pm').forEach(b => b.classList.toggle('on', b.querySelector('input').value === method));
       syncWalletUI();
     },
@@ -273,7 +276,7 @@
           }
         }
       } else {
-        CO.payment = { method, label: '💵 Cash on delivery' };
+        CO.payment = { method, label: '💵 Cash on delivery', number: '', trx: '' };
       }
       CO.step = 3;
       rerender();

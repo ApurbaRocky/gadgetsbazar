@@ -1588,6 +1588,18 @@ main:focus, a:focus-visible, button:focus-visible, input:focus-visible, select:f
 .a-coupon small { font-size: 11.5px; }
 
 .a-specs-head { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+.a-img-pick { display: flex; gap: 14px; align-items: flex-start; margin: 14px 0 4px; }
+.a-img-prev {
+  width: 100px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  flex-shrink: 0;
+}
+.a-img-controls { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
+.a-img-controls .btn-sm { cursor: pointer; }
 .a-specs { display: flex; flex-direction: column; gap: 8px; }
 .a-spec-row { display: flex; gap: 8px; }
 .a-spec-row input {
