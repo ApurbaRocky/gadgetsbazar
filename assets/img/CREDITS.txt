@@ -1,0 +1,27 @@
+﻿p001 -> https://live.staticflickr.com/5261/5818088153_bc1df43902_b.jpg | title: pcb for the wind powered mobile phone charger | license page: https://www.flickr.com/photos/85712049@N00/5818088153
+p002 -> https://live.staticflickr.com/8447/7749218052_786f6462e0_b.jpg | title: usb charger to fit a car lighter socket | license page: https://www.flickr.com/photos/7718908@N04/7749218052
+p004 -> https://live.staticflickr.com/3747/13276663035_a39c4b069e_b.jpg | title: Inside the Maxell Qi wireless charger | license page: https://www.flickr.com/photos/30047235@N03/13276663035
+p005 -> https://live.staticflickr.com/5657/22872769096_bbd87b72a3_b.jpg | title: Ice Max 3D full coverage glass screen protector. | license page: https://www.flickr.com/photos/29621165@N03/22872769096
+p006 -> https://live.staticflickr.com/5070/5686999794_a5afacc848_b.jpg | title: Smartphone Screen Resolutions (Display Sizes) | license page: https://www.flickr.com/photos/21051491@N02/5686999794
+p007 -> https://live.staticflickr.com/8031/7937955100_20426c348c_b.jpg | title: Fancy mobile phone cases | license page: https://www.flickr.com/photos/77742560@N06/7937955100
+p008 -> https://live.staticflickr.com/6062/6031073720_4ec71bd4ac_b.jpg | title: What's In My Bag | license page: https://www.flickr.com/photos/50284194@N00/6031073720
+p009 -> https://live.staticflickr.com/65535/51548822927_f0aca0647b_b.jpg | title: Fairphone+True+Wireless+Earbuds+with+Charging+Case | license page: https://www.flickr.com/photos/60295192@N08/51548822927
+p010 -> https://live.staticflickr.com/3117/3223785516_fbac56e230_b.jpg | title: Washable Apple iPhone earbuds | license page: https://www.flickr.com/photos/83346641@N00/3223785516
+p011 -> https://live.staticflickr.com/3694/11728892063_a143d10f65_b.jpg | title: USB Cable | license page: https://www.flickr.com/photos/26782864@N00/11728892063
+p012 -> https://live.staticflickr.com/3818/11729396666_f65c777d71_b.jpg | title: Lightning Cable | license page: https://www.flickr.com/photos/26782864@N00/11729396666
+p013 -> https://live.staticflickr.com/4828/31006251357_5508f788f3_b.jpg | title: 2018 Bay Area Mechanical Keyboard Meetup | license page: https://www.flickr.com/photos/47581723@N00/31006251357
+p014 -> https://live.staticflickr.com/3121/2786640478_92002e499a_b.jpg | title: Apple Wireless Keyboard | license page: https://www.flickr.com/photos/29210463@N04/2786640478
+p015 -> https://live.staticflickr.com/7242/6848810640_95f2076266_b.jpg | title: Computer Mouse Isolated on White Background | license page: https://www.flickr.com/photos/42183150@N00/6848810640
+p016 -> https://live.staticflickr.com/2145/2090536915_2d3b5d91ab_b.jpg | title: Logitech VX Revolution and Logitech G5 Gaming Mouse (2007 version) | license page: https://www.flickr.com/photos/77158296@N00/2090536915
+p017 -> https://live.staticflickr.com/2599/3801412611_1165b4ce8b_b.jpg | title: Laptop Stand, Experiment 1 | license page: https://www.flickr.com/photos/42586873@N00/3801412611
+p018 -> https://live.staticflickr.com/4262/34541225064_1be52cf9bb_b.jpg | title: Pi-top - a Raspberry Pi in a laptop holder | license page: https://www.flickr.com/photos/135302410@N02/34541225064
+p019 -> https://live.staticflickr.com/2416/2348442090_c762c0f5a2_b.jpg | title: Second Belkin 7-port USB hub | license page: https://www.flickr.com/photos/30139045@N00/2348442090
+p020 -> https://live.staticflickr.com/4046/4252344644_b087feb06f_b.jpg | title: homer simpson usb hub | license page: https://www.flickr.com/photos/8764442@N07/4252344644
+p021 -> https://live.staticflickr.com/41/92145961_7a34603ed1_b.jpg | title: Webcam | license page: https://www.flickr.com/photos/73628542@N00/92145961
+p022 -> https://live.staticflickr.com/2283/2404442122_b4e11aa713_b.jpg | title: Webcam | license page: https://www.flickr.com/photos/23054755@N00/2404442122
+p023 -> https://live.staticflickr.com/8537/29287309790_2f40290dd9_b.jpg | title: Wonderful desk mat! | license page: https://www.flickr.com/photos/23063899@N07/29287309790
+p024 -> https://live.staticflickr.com/4088/5043174502_1c6f4d61c2_b.jpg | title: Release, John's hands using the mouse pad at his laptop testing stations, John's Deskside (Helpdesk) Office Amazon, PAC-MED building, Seattle, Washington, USA | license page: https://www.flickr.com/photos/71401718@N00/5043174502
+p025 -> https://live.staticflickr.com/8740/16199008854_2824d6e4c8_b.jpg | title: Wifi Router | license page: http://www.flickr.com/photos/82701576@N03/16199008854
+p026 -> https://live.staticflickr.com/65535/49105478368_f76ac3f54e_b.jpg | title: EBikemotion Rang extender battery and cage | license page: https://www.flickr.com/photos/29558127@N06/49105478368
+p027 -> https://live.staticflickr.com/5124/5339417741_6a54da4db7_b.jpg | title: Ethernet Cable | license page: https://www.flickr.com/photos/44124390461@N01/5339417741
+p028 -> https://live.staticflickr.com/3364/3248665453_0f885ff438_b.jpg | title: Another view of Cantenna II | license page: https://www.flickr.com/photos/52195472@N00/3248665453
